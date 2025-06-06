@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Franco's Gourmet Atelier</title>
+    <link rel="preload" as="image" href="https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1920">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+        .menu-card {
+            transition: all 0.3s ease;
+        }
+        .menu-card:hover {
+            transform: scale(1.02);
+        }
+        .menu-card img {
+            transition: transform 0.5s ease;
+        }
+        .menu-card:hover img {
+            transform: scale(1.1);
+        }
+        .menu-tab {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+        }
+        .menu-tab.active {
+            background-color: #000;
+            color: #fbbf24;
+        }
+        .menu-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .menu-content.active {
+            display: grid;
+        }
+        
+        /* Mobile menu transitions */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            transform-origin: top;
+        }
+        #mobile-menu.hidden {
+            opacity: 0;
+            transform: scaleY(0);
+        }
+        #mobile-menu:not(.hidden) {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+        /* Responsive grid adjustments */
+        @media (max-width: 768px) {
+            .grid {
+                gap: 1rem !important;
+            }
+            .menu-card {
+                padding: 1.5rem !important;
+            }
+            .menu-card h3 {
+                font-size: 1.25rem !important;
+            }
+            .menu-card p {
+                font-size: 0.875rem !important;
+            }
+        }
+        .dot-pattern {
+            background-image: radial-gradient(circle at 1px 1px, black 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.03;
+        }
+        .fancy-border {
+            position: relative;
+        }
+        .fancy-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #fbbf24, #92400e, #fbbf24);
+            z-index: -1;
+            border-radius: inherit;
+            opacity: 0.7;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white">
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-black text-yellow-400 shadow-lg z-50">
+        <div class="absolute inset-0 hero-pattern opacity-20"></div>
+        <div class="container mx-auto px-4 py-6 relative">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-center md:text-left flex items-center gap-3">
+                    <div class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-yellow-400 drop-shadow-lg transform -rotate-6" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 10c-2 0-4 4-4 8s2 8 4 8 4-4 4-8-2-8-4-8z" fill="currentColor" />
+                            <path d="M44 10c2 0 4 4 4 8s-2 8-4 8-4-4-4-8 2-8 4-8z" fill="currentColor" />
+                            <line x1="20" y1="26" x2="20" y2="54" stroke-width="3" />
+                            <line x1="44" y1="26" x2="44" y2="54" stroke-width="3" />
+                            <path d="M20 54h24" stroke-width="3" />
+                            <path d="M20 54c0 4 24 4 24 0" stroke-width="3" />
+                        </svg>
+                        <div class="absolute -inset-1 bg-yellow-400 blur-lg opacity-30 rounded-full"></div>
+                    </div>
+                    <span class="tracking-wider">FRANCO'S GOURMET ATELIER</span>
+                </h1>
+                <nav class="flex justify-center md:justify-end relative">
+                    <button id="mobile-menu-btn" class="md:hidden px-4 py-2 text-yellow-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                    <ul id="mobile-menu" class="hidden md:flex flex-col md:flex-row absolute md:relative top-full left-0 right-0 md:top-auto bg-black md:bg-transparent p-4 md:p-0 gap-4 md:gap-8 text-sm uppercase tracking-wider font-medium w-full md:w-auto text-center shadow-lg md:shadow-none">
+                        <li><a href="#" class="block py-2 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#menu" class="block py-2 hover:text-white transition-colors">Menu</a></li>
+                        <li><a href="#about" class="block py-2 hover:text-white transition-colors">About</a></li>
+                        <li>
+                            <a href="#reservation" class="block py-2 hover:text-white transition-colors scroll-link fancy-border px-4 rounded-lg bg-black">
+                                Reserve
+                            </a>
+                        </li>
+                        <li><a href="#contact-section" class="block py-2 hover:text-white transition-colors scroll-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative h-[700px] mt-20">
+        <div class="hero-section absolute inset-0 bg-cover bg-center bg-no-repeat bg-gray-900 transition-opacity duration-500 opacity-0" style="background-image: url('https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1920'); will-change: opacity;">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80">
+                <div class="absolute inset-0 hero-pattern"></div>
+                <div class="container mx-auto px-4 h-full flex items-center justify-center">
+                    <div class="text-center text-white animate-fade-in max-w-4xl relative">
+                        <!-- Decorative elements -->
+                        <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-1 bg-yellow-400"></div>
+                        <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-16 h-1 bg-yellow-400"></div>
+                        
+                        <h2 class="text-6xl md:text-7xl font-bold mb-8 animate-slide-up tracking-wide">
+                            Welcome to Franco's
+                        </h2>
+                        <p class="text-xl md:text-2xl animate-slide-up delay-200 text-gray-300 mb-12 tracking-wide">
+                            Experience authentic American cuisine with a gourmet twist
+                        </p>
+                        
+                        <div class="flex flex-wrap justify-center gap-6 animate-slide-up delay-300">
+                            <a href="#menu" class="px-8 py-4 bg-yellow-400 text-black font-bold rounded-lg hover:bg-yellow-500 transition-colors uppercase tracking-wider text-sm fancy-border">
+                                View Menu
+                            </a>
+                            <a href="#reservation" class="px-8 py-4 bg-transparent border-2 border-yellow-400 text-yellow-400 font-bold rounded-lg hover:bg-yellow-400 hover:text-black transition-all uppercase tracking-wider text-sm scroll-link">
+                                Make Reservation
+                            </a>
+                        </div>
+
+                        <!-- Bottom decorative elements -->
+                        <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-16 h-1 bg-yellow-400"></div>
+                        <div class="absolute -bottom-16 left-1/2 -translate-x-1/2 w-32 h-1 bg-yellow-400"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section id="about" class="relative bg-black text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.pexels.com/photos/2814828/pexels-photo-2814828.jpeg')] bg-cover bg-center opacity-20"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-black/90"></div>
+        <div class="absolute inset-0 hero-pattern opacity-10"></div>
+        
+        <div class="container mx-auto max-w-5xl relative">
+            <div class="text-center mb-16">
+                <div class="inline-block relative">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white relative z-10">Our Story</h2>
+                    <div class="absolute -bottom-3 left-0 w-full h-1 bg-yellow-400"></div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <p class="text-lg md:text-xl leading-relaxed text-gray-300">
+                        At Franco's Gourmet Atelier, we blend authentic American flavors with a gourmet twist to create an unforgettable dining experience.
+                    </p>
+                    <p class="text-lg md:text-xl leading-relaxed text-gray-300">
+                        Our passion for quality ingredients and exceptional service drives everything we do. Join us to savor dishes crafted with love and tradition.
+                    </p>
+                    <div class="pt-6">
+                        <div class="inline-flex items-center gap-4 text-yellow-400 font-semibold">
+                            <span class="w-12 h-px bg-yellow-400"></span>
+                            <span class="uppercase tracking-wider text-sm">Est. 2024</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="aspect-square rounded-2xl overflow-hidden fancy-border transform hover:scale-105 transition-transform duration-500">
+                        <img 
+                            src="https://images.pexels.com/photos/3535383/pexels-photo-3535383.jpeg" 
+                            alt="Chef preparing food" 
+                            class="w-full h-full object-cover"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-yellow-400/20 rounded-full blur-2xl"></div>
+                    <div class="absolute -top-6 -left-6 w-32 h-32 bg-yellow-400/20 rounded-full blur-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="relative bg-white py-24 md:py-32 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg')] bg-fixed bg-cover bg-center opacity-5"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white"></div>
+        <div class="container mx-auto px-4 relative space-y-16">
+            <div class="text-center">
+                <div class="inline-block relative">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 text-gray-900 relative z-10">Our Menu</h2>
+                    <div class="absolute -bottom-3 left-0 w-full h-1 bg-yellow-400"></div>
+                </div>
+                <p class="text-lg text-gray-600 mt-8 max-w-2xl mx-auto">
+                    Discover our carefully curated selection of dishes, crafted with the finest ingredients
+                </p>
+            </div>
+
+            <div class="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+                <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-4 p-6 bg-white/80 backdrop-blur-sm rounded-2xl mb-12 shadow-lg border border-gray-100 min-w-max md:min-w-0">
+                    <button class="menu-tab active whitespace-nowrap px-6 py-3 rounded-lg bg-black text-yellow-400 hover:bg-gray-900 shadow-md hover:shadow-xl transition-all font-medium" data-tab="appetizer">Appetizer</button>
+                    <button class="menu-tab whitespace-nowrap px-6 py-3 rounded-lg bg-white hover:bg-gray-50 shadow-md hover:shadow-xl transition-all font-medium" data-tab="soups">Soups</button>
+                    <button class="menu-tab whitespace-nowrap px-6 py-3 rounded-lg bg-white hover:bg-gray-50 shadow-md hover:shadow-xl transition-all font-medium" data-tab="salad">Salad</button>
+                    <button class="menu-tab whitespace-nowrap px-6 py-3 rounded-lg bg-white hover:bg-gray-50 shadow-md hover:shadow-xl transition-all font-medium" data-tab="main">Main Course</button>
+                    <button class="menu-tab whitespace-nowrap px-6 py-3 rounded-lg bg-white hover:bg-gray-50 shadow-md hover:shadow-xl transition-all font-medium" data-tab="dessert">Dessert</button>
+                    <button class="menu-tab whitespace-nowrap px-6 py-3 rounded-lg bg-white hover:bg-gray-50 shadow-md hover:shadow-xl transition-all font-medium" data-tab="beverages">Beverages</button>
+                </div>
+            </div>
+
+            <!-- Menu Content -->
+            <div class="menu-content active" id="appetizer">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Star-Spangled Sliders</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱151</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Mini beef patties grilled to perfection, topped with sharp cheddar, caramelized onions, and tangy pickles on buttery brioche buns — a bite sized taste of Americana.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Yankee Doodle Deviled Eggs</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱159</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Classic deviled eggs with a patriotic twist — creamy yolk filling spiced with mustard, smoked paprika, and crispy bacon crumbles for that all-American flair.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Southern Cornbread Bites</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱187</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Golden, bite-sized cornbread squares infused with cheddar and jalapeño, served warm with a side of honey butter for a true taste of the South.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Liberty Loaded Nachos</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱124</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Crispy tortilla chips piled high with seasoned ground beef, melted cheddar, fresh pico de gallo, jalapeños, sour cream, and guacamole — freedom never tasted so good.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Bourbon BBQ Meatball Skewers</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱198</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Juicy homemade meatballs glazed with a rich bourbon-barbecue sauce, grilled on skewers and garnished with chopped scallions — sweet, smoky, and crowd-pleasing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-content" id="soups">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">New England Fog<br/><span class="text-lg text-gray-600">(Clam Chowder)</span></h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱157</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A creamy, comforting bowl of traditional New England clam chowder — packed with tender clams, diced potatoes, smoky bacon, and herbs, evoking the misty shores of the Northeast.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Smoky Appalachian<br/>Bean Stew</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱129</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Hearty and rustic, this slow-simmered stew blends smoked ham hocks, pinto beans, and garden vegetables in a savory broth inspired by Appalachian home cooking.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Prairie Harvest<br/>Butternut Soup</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱104</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Silky butternut squash purée spiced with cinnamon and nutmeg, finished with a drizzle of maple cream — a warm and earthy homage to America's heartland.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Carolina Crab &<br/>Corn Chowder</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱194</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A rich Southern-style chowder brimming with sweet corn, lump crab meat, red bell pepper, and a touch of Old Bay seasoning for a coastal Carolina kick.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">West Coast Wild<br/>Mushroom Bisque</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱145</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A velvety blend of wild mushrooms, garlic, and herbs, simmered in cream and finished with white truffle oil — a refined tribute to the Pacific Northwest's forest bounty.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-content" id="salad">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Californian<br/>Ranch Toss</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱126</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A crisp mix of romaine, grape tomatoes, cucumbers, shredded carrots, and avocado slices, tossed in creamy ranch dressing and topped with crunchy tortilla strips — fresh, colorful, and West Coast cool.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Bayou Blackened<br/>Chicken Caesar</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱143</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Classic Caesar greens meet bold Southern flavor with spicy blackened chicken, garlic croutons, Parmesan shavings, and a zesty Creole-style Caesar dressing.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Cobb on<br/>the Hill</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱185</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A hearty, elevated take on the American Cobb — layers of grilled chicken, bacon, blue cheese, hard-boiled eggs, avocado, and cherry tomatoes over romaine, served with a house vinaigrette.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Liberty Orchard<br/>Spinach Salad</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱140</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Fresh baby spinach tossed with sliced apples, candied pecans, dried cranberries, and goat cheese, finished with a warm apple cider vinaigrette — a taste of fall in every bite.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Golden State<br/>Quinoa Bowl</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱132</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A vibrant California-inspired bowl of tri-color quinoa, arugula, roasted sweet potatoes, chickpeas, cherry tomatoes, and citrus vinaigrette — wholesome, flavorful, and sun-kissed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-content" id="main">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Route 66<br/>Ribeye</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱851</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A 12 oz. hand-cut ribeye steak grilled to your liking, seasoned with a smoky dry rub and served with garlic mashed potatoes and grilled corn — a road-trip-worthy classic straight from the American heartland.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Deep South<br/>Fried Chicken Supreme</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱533</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Crispy, golden-fried buttermilk chicken breast seasoned with Southern spices, served atop a sweet potato waffle with creamy country gravy and a drizzle of honey butter.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Texas Smokehouse<br/>Brisket</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱504</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Slow-smoked, tender beef brisket coated in a bold Texas-style BBQ sauce, served with skillet cornbread, tangy slaw, and baked beans for a full Lone Star experience.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Chesapeake Bay<br/>Grilled Salmon</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱479</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Fresh Atlantic salmon grilled with Old Bay seasoning and lemon butter, paired with wild rice pilaf and sautéed seasonal vegetables — a nod to the flavors of the Mid-Atlantic coast.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">American Heartland<br/>Meatloaf Stack</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱561</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A towering slice of savory house-made meatloaf layered with mashed potatoes, smothered in brown gravy, and topped with crispy onion strings — pure Midwest comfort on a plate.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-content" id="dessert">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Stars & Stripes<br/>Cheesecake</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱215</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A rich, creamy New York-style cheesecake swirled with raspberry and blueberry compote, set on a buttery graham cracker crust finished with whipped cream and a patriotic flair.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Dixie Pecan Pie<br/>Delight</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱159</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A Southern classic with a twist — gooey bourbon-vanilla filling loaded with toasted pecans in a flaky crust, served warm with a dollop of whipped cream or a scoop of vanilla ice cream.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Rocky Mountain<br/>S'mores Sundae</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱200</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Rich chocolate Layers of chocolate fudge, graham cracker crumbles, and toasted marshmallow atop creamy vanilla ice cream — a campfire favorite turned decadent dessert.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Red Velvet<br/>Freedom Cake</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱205</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Moist red velvet cake stacked high with layers of cream cheese frosting, finished with red, white, and blue sprinkles indulgent, festive, and all-American.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Midwest Apple Pie<br/>à la Mode</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱146</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A golden lattice-crust pie filled with cinnamon-spiced apples, served warm with a generous scoop of vanilla bean ice cream — pure heartland nostalgia in every bite.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-content" id="beverages">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Liberty<br/>Lemonade Fizz</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱196</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A sparkling blend of fresh-squeezed lemonade and citrus soda, garnished with lemon wheels and mint — crisp, refreshing, and full of zest.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Bourbon &<br/>Blueberry Smash</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱240</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A bold Southern-style cocktail with muddled blueberries, mint, a splash of lemon, and smooth bourbon over ice — smoky, fruity, and just the right amount of kick.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Route 66<br/>Root Beer Float</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱180</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Old-fashioned root beer poured over creamy vanilla ice cream in a frosted mug — a sweet and fizzy taste of Americana.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Cherry Cola<br/>Cream Cooler</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱240</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                Classic cherry cola blended with vanilla cream and served over crushed ice, garnished with a maraschino cherry — sweet, nostalgic, and summer-ready.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="menu-card group p-8 bg-white rounded-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="absolute top-0 right-0 w-2 h-full bg-yellow-400"></div>
+                        <div class="relative">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-2xl font-bold text-gray-900">Mint Julep<br/>Mojito Twist</h3>
+                                <span class="text-lg font-bold text-gray-900 bg-yellow-400 px-6 py-2 rounded-full shadow-lg fancy-border">₱112</span>
+                            </div>
+                            <div class="w-20 h-1 bg-yellow-400 mb-6"></div>
+                            <p class="text-gray-600 leading-relaxed">
+                                A hybrid of Southern charm and tropical cool — bourbon, lime, and mint shaken with club soda and served over crushed ice for a refreshing new take on two classic cocktails.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QR Code Section -->
+    <section class="py-20 md:py-24 px-6 bg-gradient-to-r from-yellow-50 via-white to-yellow-50 border-t border-gray-200">
+        <div class="container mx-auto max-w-lg text-center relative">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-yellow-600 drop-shadow-lg tracking-wide">
+                Scan & Discover <br />
+                <span class="text-gray-900">Franco's Gourmet Atelier</span>
+            </h2>
+            <p class="text-base md:text-lg mb-8 text-gray-700 max-w-md mx-auto">
+                Use your phone to scan the QR code and explore our menu and services on the go!
+            </p>
+            <div class="p-6 rounded-3xl inline-block shadow-2xl bg-white ring-4 ring-yellow-200">
+                <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://francos-gourmet-atelier.com" 
+                    alt="QR Code to visit Franco's Gourmet Atelier website" 
+                    class="w-56 h-auto mx-auto"
+                />
+            </div>
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full bg-yellow-200 opacity-30 blur-3xl pointer-events-none"></div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reservation" class="relative bg-black text-white py-24 md:py-32 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg')] bg-cover bg-center opacity-20"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40"></div>
+        <div class="container mx-auto max-w-4xl px-6 relative">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-6">Make a Reservation</h2>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+                    Reserve your table today and experience our exceptional cuisine and service
+                </p>
+            </div>
+            
+            <form class="bg-white/10 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-2xl space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Name</label>
+                        <input type="text" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all" required>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Phone</label>
+                        <input type="tel" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all" required>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Date</label>
+                        <input type="date" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all" required>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Time</label>
+                        <select class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all" required>
+                            <option value="">Select time</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                            <option value="18:00">6:00 PM</option>
+                            <option value="19:00">7:00 PM</option>
+                            <option value="20:00">8:00 PM</option>
+                            <option value="21:00">9:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Number of Guests</label>
+                        <select class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5">5 People</option>
+                            <option value="6">6 People</option>
+                            <option value="7">7 People</option>
+                            <option value="8">8 People</option>
+                            <option value="9">9 People</option>
+                            <option value="10">10+ People</option>
+                        </select>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium">Special Requests</label>
+                        <input type="text" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all" placeholder="Optional">
+                    </div>
+                </div>
+                <div class="text-center pt-4">
+                    <button type="submit" class="px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg transition-colors inline-flex items-center gap-2 group">
+                        Confirm Reservation
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer with Contact Information -->
+    <footer id="contact-section" class="bg-gray-900 text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-bold">FRANCO'S GOURMET ATELIER</h2>
+                    <p class="text-gray-400">Experience authentic American cuisine with a gourmet twist</p>
+                    <div class="pt-4">
+                        <a href="https://www.facebook.com/francosgourmetatelier" target="_blank" 
+                           class="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+                            <span>Follow us on Facebook</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hours -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold">Hours</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p>Monday - Sunday</p>
+                        <p>11:00 AM - 10:00 PM</p>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold">Contact</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p>Amethyst Street,</p>
+                        <p>Tomas Morato, Quezon City</p>
+                        <p class="pt-2">Phone: 285-443678</p>
+                    </div>
+                </div>
+
+                <!-- QR Code -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold">Scan & Visit</h3>
+                    <div class="bg-white p-3 rounded-lg inline-block">
+                        <img 
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://websitenijam.github.io/Francos/" 
+                            alt="QR Code to visit Franco's Gourmet Atelier website"
+                            class="w-56 h-auto mx-auto"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-16 pt-8 border-t border-gray-800 text-center text-gray-400">
+                <p>&copy; 2024 Franco's Gourmet Atelier. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Section -->
+    <section id="contact-section" class="bg-yellow-50 py-20 md:py-28 px-6 md:px-12 text-gray-900">
+        <div class="container mx-auto max-w-4xl text-center space-y-8">
+            <h2 class="text-4xl font-extrabold mb-4 tracking-wide">Get in Touch</h2>
+            <p class="text-lg max-w-3xl mx-auto mb-8">
+                We would love to hear from you! Whether you have questions, want to make a reservation, or just want to say hello, reach out to us.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left">
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold">Address</h3>
+                    <p>Amethyst Street, Tomas Morato, Quezon City</p>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold">Phone</h3>
+                    <p>285-443678</p>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="text-xl font-semibold">Follow Us</h3>
+                    <p>
+                        <a href="https://www.facebook.com/francosgourmetatelier" target="_blank" class="text-yellow-600 hover:text-yellow-700 font-semibold underline">Facebook: Franco's Gourmet Atelier</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Smooth scroll for all links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Menu tabs functionality with smooth transitions
+        const menuTabs = document.querySelectorAll('.menu-tab');
+        const menuContents = document.querySelectorAll('.menu-content');
+
+        menuTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                menuTabs.forEach(t => t.classList.remove('active'));
+                menuContents.forEach(c => {
+                    c.classList.remove('active');
+                    c.style.opacity = '0';
+                });
+
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const content = document.getElementById(tab.dataset.tab);
+                content.classList.add('active');
+                
+                // Smooth fade in effect
+                setTimeout(() => {
+                    content.style.opacity = '1';
+                }, 50);
+            });
+        });
+
+        // Initialize first tab content opacity
+        document.querySelector('.menu-content.active').style.opacity = '1';
+    </script>
+
+    <!-- Image loading handler -->
+    <script>
+        // Hero image loading optimization
+        window.addEventListener('load', () => {
+            const heroImage = new Image();
+            heroImage.src = 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1920';
+            
+            heroImage.onload = () => {
+                const heroSection = document.querySelector('.hero-section');
+                if (heroSection) {
+                    heroSection.style.opacity = '1';
+                }
+            };
+
+            // Fallback if image fails to load
+            heroImage.onerror = () => {
+                const heroSection = document.querySelector('.hero-section');
+                if (heroSection) {
+                    heroSection.style.backgroundImage = 'none';
+                    heroSection.classList.add('bg-gray-900');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
+
